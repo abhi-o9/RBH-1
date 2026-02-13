@@ -1,0 +1,66 @@
+<h2>Dashboard</h2>
+
+<button (click)="logout()">Logout</button>
+
+<hr>
+
+<!-- ================= ADMIN PANEL ================= -->
+<div *ngIf="role === 'admin'">
+
+  <h3>Admin Panel</h3>
+
+  <button>Tab A</button>
+  <button>Tab B</button>
+  <button>Tab C</button>
+
+  <hr>
+
+  <h4>Pending User Approvals</h4>
+
+  <ng-container *ngIf="pendingUsers && pendingUsers.length > 0; else noUsers">
+
+    <table border="1">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Action</th>
+      </tr>
+
+      <tr *ngFor="let user of pendingUsers">
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <button (click)="approveUser(user._id)">Approve</button>
+        </td>
+      </tr>
+    </table>
+
+  </ng-container>
+
+  <ng-template #noUsers>
+    <p>No pending users.</p>
+  </ng-template>
+
+  <p *ngIf="successMessage" style="color: green;">
+    {{ successMessage }}
+  </p>
+
+</div>
+
+<!-- ================= USER PANEL ================= -->
+<div *ngIf="role === 'user'">
+
+  <h3>User Panel</h3>
+  <p>Welcome to your dashboard!</p>
+
+
+  <button>Tab D</button>
+  <button>Tab E</button>
+  <button>Tab F</button>
+
+  <hr>
+
+
+</div>
