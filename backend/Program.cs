@@ -2,8 +2,15 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using backend.Services;
+using Microsoft.EntityFrameworkCore;
+using backend.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Controllers
 builder.Services.AddControllers();

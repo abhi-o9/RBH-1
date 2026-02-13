@@ -1,14 +1,37 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+using backend.Data;
+using backend.Models;
 
-[ApiController]
-[Route("api/test")]
-public class TestController : ControllerBase
+namespace backend.Controllers
 {
-    [Authorize]
-    [HttpGet("secure")]
-    public IActionResult Secure()
+    [ApiController]
+    [Route("api/[controller]")]
+    public class TestController : ControllerBase
     {
-        return Ok("Secure endpoint works");
+        private readonly ApplicationDbContext _context;
+
+        public TestController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddTestMessage()
+        {
+            var message = new Message
+            {
+                Id = Guid.NewGuid(),
+                SenderId = "TestUser",
+                ReceiverRole = "Admin",
+                EncryptedMessage = "TestEncryptedData",
+                MessageHash = "TestHash",
+                Timestamp = DateTime.UtcNow
+            };
+
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+
+            return Ok("Message Saved Successfully!");
+        }
     }
 }
