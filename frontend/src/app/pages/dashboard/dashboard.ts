@@ -2,11 +2,21 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,
+    MatTabsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatTableModule,
+    MatToolbarModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
@@ -15,6 +25,8 @@ export class Dashboard implements OnInit {
   role: string = '';
   pendingUsers: any[] = [];
   successMessage: string = '';
+  displayedColumns: string[] = ['name', 'email', 'role', 'action'];
+
 
   constructor(
     private router: Router,

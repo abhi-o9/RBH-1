@@ -1,53 +1,128 @@
-<h2>Dashboard</h2>
+<mat-toolbar class="custom-toolbar">
+  <span>Dashboard</span>
+  <span class="spacer"></span>
+  <button mat-raised-button color="warn" (click)="logout()">Logout</button>
+</mat-toolbar>
 
-<button (click)="logout()">Logout</button>
+<div class="dashboard-container">
 
-<hr>
+  <!-- ================= ADMIN PANEL ================= -->
+  <div *ngIf="role === 'admin'">
 
-<!-- ================= ADMIN PANEL ================= -->
-<div *ngIf="role === 'admin'">
+    <mat-tab-group>
 
-  <h3>Admin Panel</h3>
+      <!-- ===== TAB A ===== -->
+      <mat-tab label="Overview">
 
-  <button>Tab A</button>
-  <button>Tab B</button>
-  <button>Tab C</button>
+        <div class="tab-content">
 
-  <hr>
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>Welcome Admin 👋</mat-card-title>
+              <mat-card-subtitle>System Overview</mat-card-subtitle>
+            </mat-card-header>
 
-  <h4>Pending User Approvals</h4>
+            <mat-card-content>
+              <p>
+                This is your administrative control panel.
+                You can manage approvals and monitor system activity here.
+              </p>
+            </mat-card-content>
+          </mat-card>
 
-  <ng-container *ngIf="pendingUsers && pendingUsers.length > 0; else noUsers">
+        </div>
 
-    <table border="1">
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Action</th>
-      </tr>
+      </mat-tab>
 
-      <tr *ngFor="let user of pendingUsers">
-        <td>{{ user.firstName }} {{ user.lastName }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
-        <td>
-          <button (click)="approveUser(user._id)">Approve</button>
-        </td>
-      </tr>
-    </table>
 
-  </ng-container>
+      <!-- ===== TAB B ===== -->
+      <mat-tab label="Messages">
+        <div class="tab-content">
+          <mat-card class="dashboard-card">
+            <mat-card-content>
+              Messaging feature coming soon...
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
 
-  <ng-template #noUsers>
-    <p>No pending users.</p>
-  </ng-template>
 
-  <p *ngIf="successMessage" style="color: green;">
-    {{ successMessage }}
-  </p>
+      <!-- ===== TAB C ===== -->
+      <mat-tab label="User Approvals">
 
-</div>
+        <div class="tab-content">
+
+          <mat-card class="dashboard-card">
+            <mat-card-title>Pending User Approvals</mat-card-title>
+
+            <mat-card-content>
+
+              <ng-container *ngIf="pendingUsers && pendingUsers.length > 0; else noUsers">
+
+                <table mat-table [dataSource]="pendingUsers" class="full-width-table">
+
+                  <!-- Name -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let user">
+                      {{ user.firstName }} 
+                    </td>
+                  </ng-container>
+
+                  <!-- Email -->
+                  <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td mat-cell *matCellDef="let user">
+                      {{ user.email }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Role -->
+                  <ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef> Role </th>
+                    <td mat-cell *matCellDef="let user">
+                      {{ user.role }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Action -->
+                  <ng-container matColumnDef="action" class="action-column">
+                    <th mat-header-cell *matHeaderCellDef class="center-cell"> Action </th>
+                    <td mat-cell *matCellDef="let user" class="center-cell">
+                      <button mat-raised-button color="primary"
+                              (click)="approveUser(user._id)">
+                        Approve
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+
+              </ng-container>
+
+              <ng-template #noUsers>
+                <p class="no-data">No pending users.</p>
+              </ng-template>
+
+              <p *ngIf="successMessage" class="success-msg">
+                {{ successMessage }}
+              </p>
+
+            </mat-card-content>
+          </mat-card>
+
+        </div>
+
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </div>
+
+
 
 <!-- ================= USER PANEL ================= -->
 <div *ngIf="role === 'user'">

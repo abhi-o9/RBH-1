@@ -1,14 +1,73 @@
+.custom-toolbar {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+.spacer {
+  flex: 1 1 auto;
+
+}
+
+.dashboard-container {
+  padding: 30px;
+/*  min-height: calc(100vh - 64px);*/
+}
+
+.dashboard-card {
+  width: 85%;
+  padding: 30px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.center-cell {
+  text-align: center !important;
+}
+
+
+.tab-content {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+
+
+}
+
+
+.full-width-table {
+  width: 100%;
+  margin-top: 20px;
+  
+}
+
+.no-data {
+  text-align: center;
+  margin-top: 20px;
+  color: gray;
+}
+
+.success-msg {
+  margin-top: 15px;
+  color: green;
+  font-weight: 500;
+}
+
 table {
-  border-collapse: collapse;
-  margin-top: 10px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-th, td {
-  padding: 8px;
-  text-align: left;
+th {
+  font-weight: 600;
+  background-color: #f4f6ff;
 }
 
-button {
-  margin-right: 5px;
-  padding: 5px 10px;
+td, th {
+  padding: 16px !important;
 }
+
+
+
