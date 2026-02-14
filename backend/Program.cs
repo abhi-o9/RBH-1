@@ -4,6 +4,7 @@ using System.Text;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
+using backend.Hubs;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// RsaEncryptionServices
+builder.Services.AddSingleton<RsaEncryptionService>();
+
+// SignalR Hubs
+builder.Services.AddSignalR();  
 
 // Controllers
 builder.Services.AddControllers();
@@ -22,7 +28,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -61,11 +68,11 @@ using (var scope = app.Services.CreateScope())
     await couchService.EnsureAdminExistsAsync();
 }
 
-
 app.UseHttpsRedirection();
 app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseMiddleware<SessionValidationMiddleware>();
 app.UseAuthorization();
+app.MapHub<ChatHub>("/chathub");
 app.MapControllers();
 app.Run();

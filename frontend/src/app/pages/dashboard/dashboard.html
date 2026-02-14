@@ -38,13 +38,41 @@
       <!-- ===== TAB B ===== -->
       <mat-tab label="Messages">
         <div class="tab-content">
-          <mat-card class="dashboard-card">
+
+          <mat-card class="dashboard-card chat-card">
+
+            <mat-card-title>Real-Time Messages</mat-card-title>
+
             <mat-card-content>
-              Messaging feature coming soon...
+
+              <!-- Message List -->
+              <div class="chat-messages">
+                <div *ngFor="let msg of messages" class="message-item">
+                  {{ msg }}
+                </div>
+              </div>
+
+              <!-- Input Area -->
+              <div class="chat-input">
+                <input matInput
+                       [(ngModel)]="message"
+                       placeholder="Type your message..."
+                       class="chat-textbox" />
+
+                <button mat-raised-button
+                        color="primary"
+                        (click)="sendMessage()">
+                  Send
+                </button>
+              </div>
+
             </mat-card-content>
+
           </mat-card>
+
         </div>
       </mat-tab>
+
 
 
       <!-- ===== TAB C ===== -->
@@ -65,7 +93,7 @@
                   <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Name </th>
                     <td mat-cell *matCellDef="let user">
-                      {{ user.firstName }} 
+                      {{ user.firstName }}
                     </td>
                   </ng-container>
 

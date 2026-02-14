@@ -68,6 +68,42 @@ th {
 td, th {
   padding: 16px !important;
 }
+/* ================= CHAT STYLING ================= */
+
+.chat-card {
+  display: flex;
+  flex-direction: column;
+  height: 450px;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+  border-radius: 12px;
+  background: #f9f9ff;
+  border: 1px solid #e0e0f0;
+  margin-bottom: 15px;
+}
+
+.message-item {
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background-color: #e8ebff;
+  width: fit-content;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-textbox {
+  flex: 1;
+}
 
 
 

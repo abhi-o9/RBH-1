@@ -7,6 +7,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { ChatService } from '../../services/chat.service'; 
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +18,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatCardModule,
     MatButtonModule,
     MatTableModule,
-    MatToolbarModule],
+    MatToolbarModule,
+    FormsModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
@@ -26,12 +29,15 @@ export class Dashboard implements OnInit {
   pendingUsers: any[] = [];
   successMessage: string = '';
   displayedColumns: string[] = ['name', 'email', 'role', 'action'];
+  message: string = '';
+  messages: string[] = [];
 
 
   constructor(
     private router: Router,
     private http: HttpClient,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private chatService: ChatService,
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +49,15 @@ export class Dashboard implements OnInit {
       console.log('Admin detected. Loading pending users...');
       this.loadPendingUsers();
     }
+
+    // Start SignalR
+    this.chatService.startConnection();
+
+    this.chatService.onMessageReceived((sender, message) => {
+      this.messages.push(`${sender}: ${message}`);
+      this.cd.detectChanges();
+    });
+
   }
 
   loadPendingUsers() {
@@ -92,6 +107,14 @@ export class Dashboard implements OnInit {
       });
 
   }
+
+  sendMessage() {
+    if (!this.message.trim()) return;
+
+    this.chatService.sendMessage('User1', this.message);
+    this.message = '';
+  }
+
 
   logout() {
     localStorage.removeItem('token');
