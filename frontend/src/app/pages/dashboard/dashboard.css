@@ -12,7 +12,9 @@
 
 .dashboard-container {
   padding: 30px;
-/*  min-height: calc(100vh - 64px);*/
+/*  background: linear-gradient(135deg, #667eea, #764ba2);*/
+  /*  min-height: calc(100vh - 64px);*/
+  height: auto;
 }
 
 .dashboard-card {
@@ -25,6 +27,7 @@
 
 .center-cell {
   text-align: center !important;
+
 }
 
 
@@ -73,12 +76,13 @@ td, th {
 .chat-card {
   display: flex;
   flex-direction: column;
-  height: 450px;
+  height: auto;
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
+  margin: 20px;
   padding: 15px;
   border-radius: 12px;
   background: #f9f9ff;
@@ -103,7 +107,20 @@ td, th {
 
 .chat-textbox {
   flex: 1;
+  border-radius: 10px;
 }
+.logged-user {
+  margin-right: 20px;
+  font-weight: 100;
+  font-size: 15px;
+}
+.chat-send-btn {
+  border-radius: 10px !important;
+}
+
+
+
+
 
 
 

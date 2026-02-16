@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ChatService } from '../../services/chat.service'; 
 import { FormsModule } from '@angular/forms';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +27,7 @@ import { FormsModule } from '@angular/forms';
 export class Dashboard implements OnInit {
 
   role: string = '';
+  loggedInUser: string = '';
   pendingUsers: any[] = [];
   successMessage: string = '';
   displayedColumns: string[] = ['name', 'email', 'role', 'action'];
@@ -42,8 +44,25 @@ export class Dashboard implements OnInit {
 
   ngOnInit(): void {
 
-    this.role = localStorage.getItem('role')?.toLowerCase() || '';
+    this.role = sessionStorage.getItem('role')?.toLowerCase() || '';
     console.log('Logged in role:', this.role);
+    const token = sessionStorage.getItem('token');
+
+if (token) {
+  const decoded: any = jwtDecode(token);
+  console.log('Decoded JWT:', decoded);
+
+  // Try common JWT fields
+  this.loggedInUser =
+  decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ||
+  decoded.unique_name ||
+  decoded.email ||
+  decoded.sub ||
+  decoded.name ||
+  '';
+
+}
+
 
     if (this.role === 'admin') {
       console.log('Admin detected. Loading pending users...');
@@ -62,7 +81,7 @@ export class Dashboard implements OnInit {
 
   loadPendingUsers() {
 
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
@@ -81,7 +100,7 @@ export class Dashboard implements OnInit {
 
   approveUser(id: string) {
 
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
@@ -92,7 +111,7 @@ export class Dashboard implements OnInit {
       {},
       {
         headers,
-        responseType: 'text' as 'json'   // 👈 THIS LINE FIXES IT
+        responseType: 'text' as 'json'  
       }
     )
       .subscribe({
@@ -111,14 +130,14 @@ export class Dashboard implements OnInit {
   sendMessage() {
     if (!this.message.trim()) return;
 
-    this.chatService.sendMessage('User1', this.message);
+    this.chatService.sendMessage(this.message);
     this.message = '';
   }
 
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('role');
     this.router.navigate(['/']);
   }
 }

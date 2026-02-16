@@ -1,6 +1,10 @@
 <mat-toolbar class="custom-toolbar">
   <span>Dashboard</span>
   <span class="spacer"></span>
+
+  <span class="logged-user">
+    {{ loggedInUser }} ({{ role }})
+  </span>
   <button mat-raised-button color="warn" (click)="logout()">Logout</button>
 </mat-toolbar>
 
@@ -60,10 +64,12 @@
                        class="chat-textbox" />
 
                 <button mat-raised-button
+                        class="chat-send-btn"
                         color="primary"
                         (click)="sendMessage()">
                   Send
                 </button>
+
               </div>
 
             </mat-card-content>
@@ -153,17 +159,68 @@
 
 
 <!-- ================= USER PANEL ================= -->
-<div *ngIf="role === 'user'">
+  <div *ngIf="role === 'user'">
+    <mat-tab-group>
+      <mat-tab label="Overview">
 
-  <h3>User Panel</h3>
-  <p>Welcome to your dashboard!</p>
+        <div class="tab-content">
 
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>Welcome User 👋</mat-card-title>
+              <mat-card-subtitle>Overview</mat-card-subtitle>
+            </mat-card-header>
 
-  <button>Tab D</button>
-  <button>Tab E</button>
-  <button>Tab F</button>
+            <mat-card-content>
+              <p>
+                This is your user panel.
+                You can manage your personel data here.
+              </p>
+            </mat-card-content>
+          </mat-card>
 
-  <hr>
+        </div>
 
+      </mat-tab>
 
-</div>
+      <mat-tab label="Messages">
+        <div class="tab-content">
+
+          <mat-card class="dashboard-card chat-card">
+
+            <mat-card-title>Real-Time Messages</mat-card-title>
+
+            <mat-card-content>
+
+              <!-- Message List -->
+              <div class="chat-messages">
+                <div *ngFor="let msg of messages" class="message-item">
+                  {{ msg }}
+                </div>
+              </div>
+
+              <!-- Input Area -->
+              <div class="chat-input">
+                <input matInput
+                       [(ngModel)]="message"
+                       placeholder="Type your message..."
+                       class="chat-textbox" />
+
+                <button mat-raised-button
+                        class="chat-send-btn"
+                        color="primary"
+                        (click)="sendMessage()">
+                  Send
+                </button>
+
+              </div>
+
+            </mat-card-content>
+
+          </mat-card>
+
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>

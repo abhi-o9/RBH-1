@@ -16,11 +16,11 @@ export class AuthService {
   }
 
   saveToken(token: string) {
-    localStorage.setItem('token', token);
+    sessionStorage.setItem('token', token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   }
 
 
@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.clear();
+    sessionStorage.clear();
     this.router.navigate(['/']);
   }
 

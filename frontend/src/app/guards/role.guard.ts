@@ -6,7 +6,7 @@ export const RoleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const router = inject(Router);
 
   const requiredRole = route.data['role'];
-  const userRole = localStorage.getItem('role');
+  const userRole = sessionStorage.getItem('role');
 
   // If no role stored, redirect to login
   if (!userRole) {

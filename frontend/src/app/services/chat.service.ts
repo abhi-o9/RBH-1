@@ -10,7 +10,7 @@ export class ChatService {
 
   public startConnection(): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5264/chathub') // change port if needed
+      .withUrl('http://localhost:5264/chathub')
       .withAutomaticReconnect()
       .build();
 
@@ -20,9 +20,17 @@ export class ChatService {
       .catch(err => console.log('Error while starting connection: ' + err));
   }
 
-  public sendMessage(sender: string, message: string) {
-    this.hubConnection.invoke('SendMessage', sender, message);
+  public sendMessage(message: string) {
+    return fetch('http://localhost:5264/api/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      },
+      body: JSON.stringify(message)
+    });
   }
+
 
   public onMessageReceived(callback: (sender: string, message: string) => void) {
     this.hubConnection.on('ReceiveMessage', (sender, message) => {

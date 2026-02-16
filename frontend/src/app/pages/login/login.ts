@@ -40,8 +40,8 @@ export class Login {
     }).subscribe({
       next: (res) => {
         // STORE TOKEN
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.role);
+        sessionStorage.setItem('token', res.token);
+        sessionStorage.setItem('role', res.role);
 
         console.log('JWT stored:', res.token);
 
