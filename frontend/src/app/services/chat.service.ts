@@ -31,6 +31,16 @@ export class ChatService {
     });
   }
 
+  public getHistory() {
+    return fetch('http://localhost:5264/api/message/history', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      }
+    }).then(res => res.json());
+  }
+
 
   public onMessageReceived(callback: (sender: string, message: string) => void) {
     this.hubConnection.on('ReceiveMessage', (sender, message) => {

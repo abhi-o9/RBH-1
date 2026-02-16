@@ -41,9 +41,9 @@
 
 
 .full-width-table {
-  width: 100%;
+  width: auto;
   margin-top: 20px;
-  
+  background-color: rgba(102, 126, 234, 0.00);
 }
 
 .no-data {
@@ -88,16 +88,50 @@ td, th {
   background: #f9f9ff;
   border: 1px solid #e0e0f0;
   margin-bottom: 15px;
+/*  max-height: 400px;*/
 }
 
 .message-item {
-  padding: 8px 12px;
-  margin-bottom: 8px;
-  border-radius: 10px;
-  background-color: #e8ebff;
-  width: fit-content;
-  max-width: 70%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  background-color: rgb(72, 107, 251, 0.015);
+  width: auto;
+  /*  max-width: 70%;*/
   word-wrap: break-word;
+  display: flex;
+}
+.sent {
+  justify-content: flex-end;
+}
+
+.received {
+  justify-content: flex-start;
+}
+
+.chat-bubble {
+  padding: 10px 12px;
+  border-radius: 14px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.sent .chat-bubble {
+  background-color: rgb(209, 231, 255);
+}
+
+.received .chat-bubble {
+  background-color: rgb(235, 248, 233);
+}
+
+.sender {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.time {
+  font-size: 10px;
+  color: gray;
+  margin-top: 5px;
 }
 
 .chat-input {
@@ -117,10 +151,3 @@ td, th {
 .chat-send-btn {
   border-radius: 10px !important;
 }
-
-
-
-
-
-
-

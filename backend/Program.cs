@@ -5,9 +5,12 @@ using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using backend.Hubs;
+using System.Security.Cryptography;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -61,5 +61,27 @@ namespace backend.Controllers
 
             return Ok("Message saved and broadcasted successfully.");
         }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetMessageHistory()
+        {
+            var user = User.Identity?.Name ?? "Unknown";
+
+            var messages = _context.Messages
+                .OrderBy(m => m.Timestamp)
+                .ToList();
+
+            var decryptedMessages = messages.Select(m => new
+            {
+                m.Id,
+                m.SenderId,
+                m.ReceiverRole,
+                Message = _rsaService.Decrypt(m.EncryptedMessage),
+                m.Timestamp
+            });
+
+            return Ok(decryptedMessages);
+        }
+
     }
 }

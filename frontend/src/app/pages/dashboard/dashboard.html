@@ -50,11 +50,35 @@
             <mat-card-content>
 
               <!-- Message List -->
-              <div class="chat-messages">
-                <div *ngFor="let msg of messages" class="message-item">
-                  {{ msg }}
+              <div class="chat-messages" #chatContainer>
+
+                <div *ngFor="let msg of messages"
+                     [ngClass]="{
+         'sent': msg.senderId === loggedInUser,
+         'received': msg.senderId !== loggedInUser
+       }"
+                     class="message-item">
+
+                  <mat-card class="chat-bubble">
+
+                    <div class="sender">
+                      {{ msg.senderId }}
+                    </div>
+
+                    <div class="text">
+                      {{ msg.message }}
+                    </div>
+
+                    <div class="time">
+                      {{ msg.timestamp | date:'short' }}
+                    </div>
+
+                  </mat-card>
+
                 </div>
+
               </div>
+
 
               <!-- Input Area -->
               <div class="chat-input">
@@ -193,11 +217,35 @@
             <mat-card-content>
 
               <!-- Message List -->
-              <div class="chat-messages">
-                <div *ngFor="let msg of messages" class="message-item">
-                  {{ msg }}
+              <div class="chat-messages" #chatContainer>
+
+                <div *ngFor="let msg of messages"
+                     [ngClass]="{
+         'sent': msg.senderId === loggedInUser,
+         'received': msg.senderId !== loggedInUser
+       }"
+                     class="message-item">
+
+                  <mat-card class="chat-bubble">
+
+                    <div class="sender">
+                      {{ msg.senderId }}
+                    </div>
+
+                    <div class="text">
+                      {{ msg.message }}
+                    </div>
+
+                    <div class="time">
+                      {{ msg.timestamp | date:'short' }}
+                    </div>
+
+                  </mat-card>
+
                 </div>
+
               </div>
+
 
               <!-- Input Area -->
               <div class="chat-input">

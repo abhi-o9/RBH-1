@@ -10,6 +10,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ChatService } from '../../services/chat.service'; 
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
+import { ViewChildren, QueryList, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +33,7 @@ export class Dashboard implements OnInit {
   successMessage: string = '';
   displayedColumns: string[] = ['name', 'email', 'role', 'action'];
   message: string = '';
-  messages: string[] = [];
+  messages: any[] = [];
 
 
   constructor(
@@ -62,7 +63,7 @@ if (token) {
   '';
 
 }
-
+    
 
     if (this.role === 'admin') {
       console.log('Admin detected. Loading pending users...');
@@ -72,12 +73,32 @@ if (token) {
     // Start SignalR
     this.chatService.startConnection();
 
-    this.chatService.onMessageReceived((sender, message) => {
-      this.messages.push(`${sender}: ${message}`);
-      this.cd.detectChanges();
-    });
+    this.loadHistory();
 
+  
+  this.chatService.onMessageReceived((sender, message) => {
+    this.messages.push({
+      senderId: sender,
+      message: message,
+      timestamp: new Date()
+    });
+    this.cd.detectChanges();
+    this.scrollToBottom();
+
+  });
   }
+
+  @ViewChildren('chatContainer') chatContainers!: QueryList<ElementRef>;
+  scrollToBottom() {
+    setTimeout(() => {
+      if (this.chatContainers && this.chatContainers.length > 0) {
+        const container = this.chatContainers.last.nativeElement;
+        container.scrollTop = container.scrollHeight;
+      }
+    }, 50);
+  }
+
+
 
   loadPendingUsers() {
 
@@ -132,6 +153,16 @@ if (token) {
 
     this.chatService.sendMessage(this.message);
     this.message = '';
+  }
+
+  loadHistory() {
+    this.chatService.getHistory().then(data => {
+      this.messages = data;
+      this.cd.detectChanges();
+      this.scrollToBottom();
+    }).catch(err => {
+      console.error('Error loading history:', err);
+    });
   }
 
 
