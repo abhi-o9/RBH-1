@@ -23,6 +23,9 @@ public class User
 
     public string? currentSessionId { get; set; }
 
-
     public string status { get; set; } = null!;  // "pending" or "approved"
+
+    public DateTime registeredAt { get; set; }
+    public DateTime? approvedAt { get; set; }
+
 }

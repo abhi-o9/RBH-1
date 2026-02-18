@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.SignalR;
 using System.Text;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddSingleton<RsaEncryptionService>();
 
 // SignalR Hubs
-builder.Services.AddSignalR();  
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
 // Controllers
 builder.Services.AddControllers();

@@ -8,6 +8,12 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
+    public class SendMessageRequest
+    {
+        public string Message { get; set; } = string.Empty;
+        public string ReceiverRole { get; set; } = string.Empty;
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     [Authorize] // Only logged-in users can send messages
@@ -28,46 +34,65 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendMessage([FromBody] string messageText)
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageRequest request)
         {
-            if (string.IsNullOrWhiteSpace(messageText))
+            if (string.IsNullOrWhiteSpace(request.Message))
                 return BadRequest("Message cannot be empty.");
 
-            // Get logged-in user (from JWT)
             var sender = User.Identity?.Name ?? "Unknown";
+            var senderRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value ?? "user";
 
-            // Hash
-            var hash = _rsaService.GenerateHash(messageText);
+            var receiverRole = request.ReceiverRole.ToLower();
 
-            // Encrypt
-            var encryptedMessage = _rsaService.Encrypt(messageText);
+            // Hash + Encrypt
+            var hash = _rsaService.GenerateHash(request.Message);
+            var encryptedMessage = _rsaService.Encrypt(request.Message);
 
             var message = new Message
             {
                 Id = Guid.NewGuid(),
                 SenderId = sender,
-                ReceiverRole = "All",
+                SenderRole = senderRole,
+                ReceiverRole = receiverRole,
                 EncryptedMessage = encryptedMessage,
                 MessageHash = hash,
                 Timestamp = DateTime.UtcNow
             };
 
-            // Save to PostgreSQL
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
-            // Broadcast decrypted message to clients
-            await _hubContext.Clients.All.SendAsync("ReceiveMessage", sender, messageText);
+            // 🔥 Broadcast correctly
+            if (receiverRole == "all")
+            {
+                await _hubContext.Clients.All
+                    .SendAsync("ReceiveMessage", sender, request.Message);
+            }
+            else
+            {
+                // Send to receiver group
+                await _hubContext.Clients.Group(receiverRole)
+                    .SendAsync("ReceiveMessage", sender, request.Message);
 
-            return Ok("Message saved and broadcasted successfully.");
+                // ALSO send back to sender only
+                await _hubContext.Clients.User(sender)
+                    .SendAsync("ReceiveMessage", sender, request.Message);
+            }
+
+
+            return Ok("Message sent successfully.");
         }
+
 
         [HttpGet("history")]
         public async Task<IActionResult> GetMessageHistory()
         {
-            var user = User.Identity?.Name ?? "Unknown";
+            var userRole = User.Claims
+                .FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                ?.Value?.ToLower() ?? "user";
 
             var messages = _context.Messages
+                .Where(m => m.ReceiverRole == "all" || m.ReceiverRole == userRole)
                 .OrderBy(m => m.Timestamp)
                 .ToList();
 

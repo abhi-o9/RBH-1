@@ -125,7 +125,9 @@ public class AuthController : ControllerBase
             email = email,
             passwordHash = passwordHash,
             role = request.role.ToLower(),
-            status = "pending"
+            status = "pending",
+            registeredAt = DateTime.UtcNow,
+            approvedAt = null
         };
 
         await _couchDb.CreateAsync(userId,user);

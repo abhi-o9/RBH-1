@@ -16,27 +16,23 @@
     <mat-tab-group>
 
       <!-- ===== TAB A ===== -->
-      <mat-tab label="Overview">
-
+      <!-- ===== TAB Analytics ===== -->
+      <mat-tab label="Analytics">
         <div class="tab-content">
-
           <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>Welcome Admin 👋</mat-card-title>
-              <mat-card-subtitle>System Overview</mat-card-subtitle>
-            </mat-card-header>
+            <mat-card-title>User Growth (Daily)</mat-card-title>
 
             <mat-card-content>
-              <p>
-                This is your administrative control panel.
-                You can manage approvals and monitor system activity here.
-              </p>
+              <canvas baseChart
+                      [data]="lineChartData"
+                      [type]="lineChartType">
+              </canvas>
             </mat-card-content>
+
           </mat-card>
-
         </div>
-
       </mat-tab>
+
 
 
       <!-- ===== TAB B ===== -->
@@ -82,6 +78,12 @@
 
               <!-- Input Area -->
               <div class="chat-input">
+                <select [(ngModel)]="selectedRole" class="role-selector">
+                  <option value="all">All</option>
+                  <option value="admin">Admin</option>
+                  <option value="user">User</option>
+                </select>
+
                 <input matInput
                        [(ngModel)]="message"
                        placeholder="Type your message..."
@@ -249,6 +251,12 @@
 
               <!-- Input Area -->
               <div class="chat-input">
+                <select [(ngModel)]="selectedRole" class="role-selector">
+                  <option value="all">All</option>
+                  <option value="admin">Admin</option>
+                  <option value="user">User</option>
+                </select>
+
                 <input matInput
                        [(ngModel)]="message"
                        placeholder="Type your message..."

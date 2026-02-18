@@ -1,13 +1,32 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using backend.Models;
+using backend.Data;
 
 namespace backend.Hubs
 {
     public class ChatHub : Hub
     {
-        // This method will be called when a message is sent
-        public async Task SendMessage(string sender, string message)
+        private readonly ApplicationDbContext _context;
+
+        public ChatHub(ApplicationDbContext context)
         {
-            await Clients.All.SendAsync("ReceiveMessage", sender, message);
+            _context = context;
         }
+
+        // When user connects, add to role group
+        public override async Task OnConnectedAsync()
+        {
+            var httpContext = Context.GetHttpContext();
+            var role = httpContext?.Request.Query["role"].ToString();
+
+            if (!string.IsNullOrEmpty(role))
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, role.ToLower());
+            }
+
+            await base.OnConnectedAsync();
+        }
+
+        
     }
 }

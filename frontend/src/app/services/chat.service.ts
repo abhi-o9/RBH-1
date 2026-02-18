@@ -9,27 +9,40 @@ export class ChatService {
   private hubConnection!: signalR.HubConnection;
 
   public startConnection(): void {
+
+    const role = sessionStorage.getItem('role')?.toLowerCase();
+
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5264/chathub')
+      .withUrl(`http://localhost:5264/chathub?role=${role}`)
       .withAutomaticReconnect()
       .build();
 
     this.hubConnection
       .start()
-      .then(() => console.log('SignalR Connected'))
+      .then(() => console.log('SignalR Connected as role:', role))
       .catch(err => console.log('Error while starting connection: ' + err));
   }
 
-  public sendMessage(message: string) {
+
+  public sendMessage(message: string, receiverRole: string) {
+
+    const payload = {
+      Message: message,
+      ReceiverRole: receiverRole
+    };
+
     return fetch('http://localhost:5264/api/message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
       },
-      body: JSON.stringify(message)
+      body: JSON.stringify(payload)
     });
   }
+
+
+
 
   public getHistory() {
     return fetch('http://localhost:5264/api/message/history', {

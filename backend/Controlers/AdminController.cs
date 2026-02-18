@@ -44,9 +44,11 @@ public class AdminController : ControllerBase
             return NotFound("User not found");
 
         user.status = "approved";
+        user.approvedAt = DateTime.UtcNow;
 
         await _couchDb.UpdateAsync(user._id, user);
 
         return Ok("User approved successfully");
     }
+
 }
