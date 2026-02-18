@@ -55,7 +55,7 @@ export class Dashboard implements OnInit {
   selectedRole: string = 'all';
 
   // 📈 Chart Config
-  public lineChartType: ChartType = 'line';
+  public lineChartType: 'line' = 'line';
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
@@ -63,21 +63,52 @@ export class Dashboard implements OnInit {
       {
         data: [],
         label: 'Daily Approved Users',
-        borderColor: '#3f51b5',
-        backgroundColor: 'rgba(63,81,181,0.3)',
-        tension: 0.3
+        borderColor: '#5e35b1',
+        backgroundColor: 'rgba(94,53,177,0.15)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        pointBackgroundColor: '#5e35b1',
+        borderWidth: 3
       }
     ]
   };
 
-  public lineChartOptions: ChartConfiguration<'line'>['options'] = {
-    responsive: true,
-    scales: {
-      y: {
-        beginAtZero: true
+
+ public lineChartOptions: ChartConfiguration<'line'>['options'] = {
+  responsive: true,
+  animation: {
+    duration: 1200,
+    easing: 'easeOutQuart'
+  },
+  plugins: {
+    legend: {
+      position: 'top'
+    },
+    tooltip: {
+      backgroundColor: '#2c2c2c',
+      titleColor: '#fff',
+      bodyColor: '#fff',
+      padding: 12,
+      cornerRadius: 8
+    }
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false
+      }
+    },
+    y: {
+      beginAtZero: true,
+      grid: {
+        color: 'rgba(0,0,0,0.05)'
       }
     }
-  };
+  }
+};
+
 
   constructor(
     private router: Router,
@@ -188,14 +219,12 @@ export class Dashboard implements OnInit {
         const data = res.map(x => x.count);
 
         this.lineChartData = {
+          ...this.lineChartData,
           labels: labels,
           datasets: [
             {
-              data: data,
-              label: 'Daily Approved Users',
-              borderColor: '#3f51b5',
-              backgroundColor: 'rgba(63,81,181,0.3)',
-              tension: 0.3
+              ...this.lineChartData.datasets[0],
+              data: data
             }
           ]
         };
@@ -203,6 +232,8 @@ export class Dashboard implements OnInit {
         this.cd.detectChanges();
       });
   }
+
+
 
 
   sendMessage() {

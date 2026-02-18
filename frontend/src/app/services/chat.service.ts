@@ -10,18 +10,22 @@ export class ChatService {
 
   public startConnection(): void {
 
-    const role = sessionStorage.getItem('role')?.toLowerCase();
+    const role = sessionStorage.getItem('role');
+    const token = sessionStorage.getItem('token');
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`http://localhost:5264/chathub?role=${role}`)
+      .withUrl(`http://localhost:5264/chathub?role=${role}`, {
+        accessTokenFactory: () => token!
+      })
       .withAutomaticReconnect()
       .build();
 
     this.hubConnection
       .start()
-      .then(() => console.log('SignalR Connected as role:', role))
+      .then(() => console.log('SignalR Connected'))
       .catch(err => console.log('Error while starting connection: ' + err));
   }
+
 
 
   public sendMessage(message: string, receiverRole: string) {
