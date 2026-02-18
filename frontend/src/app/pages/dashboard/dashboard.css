@@ -1,18 +1,29 @@
+/* ================= GLOBAL ================= */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* ================= TOOLBAR ================= */
 .custom-toolbar {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  position: fixed;
+  position: sticky; /* sticky instead of fixed */
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 
 .spacer {
   flex: 1 1 auto;
+}
 
+.logged-user {
+  margin-right: 20px;
+  font-size: 15px;
 }
 
 .dashboard-container {
@@ -23,8 +34,16 @@
   height: auto;
 }
 
+/* ================= TAB CONTENT ================= */
+.tab-content {
+  display: flex;
+  justify-content: center;
+}
+
+/* ================= CARD ================= */
 .dashboard-card {
-  width: 85%;
+  width: 90%;
+  max-width: 1100px;
   padding: 30px;
   border-radius: 16px;
   background: white;
