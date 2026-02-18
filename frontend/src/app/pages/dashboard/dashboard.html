@@ -18,22 +18,33 @@
       <!-- ===== TAB A ===== -->
       <!-- ===== TAB Analytics ===== -->
       <mat-tab label="Analytics">
-        <div class="tab-content">
-          <mat-card class="dashboard-card">
-            <mat-card-title>User Growth (Daily)</mat-card-title>
+        <div class="analytics-wrapper">
 
+          <mat-card class="dashboard-card analytics-card">
+            <mat-card-title>User Growth (Daily)</mat-card-title>
             <mat-card-content>
               <canvas baseChart
                       [data]="lineChartData"
                       [options]="lineChartOptions"
                       [type]="lineChartType">
               </canvas>
-
             </mat-card-content>
-
           </mat-card>
+
+          <mat-card class="dashboard-card analytics-card">
+            <mat-card-title>User Distribution by Role</mat-card-title>
+            <mat-card-content>
+              <canvas baseChart
+                      [data]="pieChartData"
+                      [options]="pieChartOptions"
+                      [type]="pieChartType">
+              </canvas>
+            </mat-card-content>
+          </mat-card>
+
         </div>
       </mat-tab>
+
 
 
 

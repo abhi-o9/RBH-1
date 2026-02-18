@@ -36,4 +36,23 @@ public class AnalyticsController : ControllerBase
 
         return Ok(growthData);
     }
+
+    [HttpGet("users-by-role")]
+    public async Task<IActionResult> GetUsersByRole()
+    {
+        var users = await _couchDb.GetAllAsync<User>();
+
+        var roleData = users
+            .Where(u => u.status == "approved")
+            .GroupBy(u => u.role.ToLower())
+            .Select(g => new
+            {
+                role = g.Key,
+                count = g.Count()
+            })
+            .ToList();
+
+        return Ok(roleData);
+    }
+
 }

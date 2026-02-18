@@ -156,3 +156,25 @@ td, th {
 .chat-send-btn {
   border-radius: 10px !important;
 }
+
+/* ================= ANALYTICS LAYOUT ================= */
+
+.analytics-wrapper {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.analytics-card {
+  width: 500px; /* fixed width */
+  max-width: 100%;
+  padding: 25px;
+}
+
+  /* Fix chart size */
+  .analytics-card canvas {
+    height: 300px !important;
+  }

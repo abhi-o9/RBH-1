@@ -11,10 +11,9 @@ import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
 import { jwtDecode } from 'jwt-decode';
 import { ViewChildren, QueryList, ElementRef } from '@angular/core';
-
+import { PieController, ArcElement } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import {
-  Chart,
   LineController,
   LineElement,
   PointElement,
@@ -23,9 +22,13 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartConfiguration,
-  ChartType
+  
 } from 'chart.js';
+
+import { Chart, type ChartConfiguration } from 'chart.js';
+
+// 📊 Role Distribution Chart
+
 
 @Component({
   selector: 'app-dashboard',
@@ -107,7 +110,31 @@ export class Dashboard implements OnInit {
       }
     }
   }
-};
+  };
+  public pieChartType: 'pie' = 'pie';
+
+  public pieChartData: ChartConfiguration<'pie'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        backgroundColor: [
+          '#5e35b1',
+          '#42a5f5'
+        ]
+      }
+    ]
+  };
+
+  public pieChartOptions: ChartConfiguration<'pie'>['options'] = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    }
+  };
+
 
 
   constructor(
@@ -125,7 +152,9 @@ export class Dashboard implements OnInit {
       CategoryScale,
       Title,
       Tooltip,
-      Legend
+      Legend,
+      PieController,
+      ArcElement
     );
   }
 
@@ -148,6 +177,8 @@ export class Dashboard implements OnInit {
     if (this.role === 'admin') {
       this.loadPendingUsers();
       this.loadUserGrowth();
+      this.loadUsersByRole();   // 👈 ADD THIS
+
     }
 
     this.chatService.startConnection();
@@ -233,6 +264,29 @@ export class Dashboard implements OnInit {
       });
   }
 
+  loadUsersByRole() {
+    const token = sessionStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    this.http.get<any[]>('http://localhost:5264/api/analytics/users-by-role', { headers })
+      .subscribe(res => {
+
+        this.pieChartData = {
+          labels: res.map(x => x.role),
+          datasets: [
+            {
+              data: res.map(x => x.count),
+              backgroundColor: ['#5e35b1', '#42a5f5']
+            }
+          ]
+        };
+
+        this.cd.detectChanges();
+      });
+  }
 
 
 
