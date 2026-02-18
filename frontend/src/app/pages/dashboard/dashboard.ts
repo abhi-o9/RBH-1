@@ -201,10 +201,14 @@ export class Dashboard implements OnInit {
     setTimeout(() => {
       if (this.chatContainers?.length > 0) {
         const container = this.chatContainers.last.nativeElement;
-        container.scrollTop = container.scrollHeight;
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: 'smooth'
+        });
       }
     }, 50);
   }
+
 
   loadPendingUsers() {
     const token = sessionStorage.getItem('token');
@@ -294,6 +298,7 @@ export class Dashboard implements OnInit {
     if (!this.message.trim()) return;
     this.chatService.sendMessage(this.message, this.selectedRole);
     this.message = '';
+    this.scrollToBottom();
   }
 
   loadHistory() {

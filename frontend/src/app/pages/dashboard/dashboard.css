@@ -1,21 +1,24 @@
 /* ================= GLOBAL ================= */
-html, body {
-  height: 100%;
-  margin: 0;
-}
+
 
 /* ================= TOOLBAR ================= */
 .custom-toolbar {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  position: sticky; /* sticky instead of fixed */
+  position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.dashboard-tabs ::ng-deep .mat-mdc-tab-header {
+  position: sticky;
+  top: 64px; /* stick just below toolbar */
+  z-index: 999;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  
+}
 
 .spacer {
   flex: 1 1 auto;
@@ -27,8 +30,8 @@ html, body {
 }
 
 .dashboard-container {
-  margin-top: 40px;
-  padding: 30px;
+/*  margin-top: 64px;*/
+  padding: 20px;
   /*  background: linear-gradient(135deg, #667eea, #764ba2);*/
   /*  min-height: calc(100vh - 64px);*/
   height: auto;
@@ -44,10 +47,12 @@ html, body {
 .dashboard-card {
   width: 90%;
   max-width: 1100px;
-  padding: 30px;
+  padding: 20px;
   border-radius: 16px;
   background: white;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  margin:30px;
+/*  padding-bottom:0px;*/
 }
 
 .center-cell {
@@ -97,33 +102,29 @@ td, th {
 }
 /* ================= CHAT STYLING ================= */
 
+/* ================= CHAT CARD ================= */
 .chat-card {
   display: flex;
   flex-direction: column;
-  height: auto;
 }
 
+/* ================= CHAT MESSAGES AREA ================= */
 .chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  margin: 20px;
+  max-height: 48vh; /* Controls chat height */
+  overflow-y: auto; /* Only messages scroll */
   padding: 15px;
-  border-radius: 12px;
   background: #f9f9ff;
+  border-radius: 12px;
   border: 1px solid #e0e0f0;
-  margin-bottom: 15px;
-/*  max-height: 400px;*/
+  margin: 15px;
 }
 
+/* ================= MESSAGE ALIGNMENT ================= */
 .message-item {
-  padding: 10px 12px;
-  margin-bottom: 10px;
-  background-color: rgb(72, 107, 251, 0.015);
-  width: auto;
-  /*  max-width: 70%;*/
-  word-wrap: break-word;
   display: flex;
+  margin-bottom: 12px;
 }
+
 .sent {
   justify-content: flex-end;
 }
@@ -132,21 +133,23 @@ td, th {
   justify-content: flex-start;
 }
 
+/* ================= MESSAGE BUBBLE ================= */
 .chat-bubble {
-  padding: 10px 12px;
-  border-radius: 14px;
-  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  max-width: 70%;
   word-wrap: break-word;
 }
 
 .sent .chat-bubble {
-  background-color: rgb(209, 231, 255);
+  background-color: #d1e7ff;
 }
 
 .received .chat-bubble {
-  background-color: rgb(235, 248, 233);
+  background-color: #eaf8e9;
 }
 
+/* ================= MESSAGE TEXT DETAILS ================= */
 .sender {
   font-weight: bold;
   font-size: 12px;
@@ -158,23 +161,36 @@ td, th {
   margin-top: 5px;
 }
 
+/* ================= CHAT INPUT AREA ================= */
 .chat-input {
   display: flex;
   gap: 10px;
+  align-items: center;
+  
 }
 
 .chat-textbox {
   flex: 1;
   border-radius: 10px;
+  height: 30px;
 }
-.logged-user {
-  margin-right: 20px;
-  font-weight: 100;
-  font-size: 15px;
-}
+
 .chat-send-btn {
   border-radius: 10px !important;
+  height: 35px;
+  padding: 6px 12px;
 }
+
+.role-selector {
+  height: 35px; /* Match input height */
+  
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  min-width: 90px;
+  background-color: white;
+}
+
 
 /* ================= ANALYTICS LAYOUT ================= */
 

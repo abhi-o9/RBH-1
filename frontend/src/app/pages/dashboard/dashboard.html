@@ -13,7 +13,7 @@
   <!-- ================= ADMIN PANEL ================= -->
   <div *ngIf="role === 'admin'">
 
-    <mat-tab-group>
+    <mat-tab-group class="dashboard-tabs">
 
       <!-- ===== TAB A ===== -->
       <!-- ===== TAB Analytics ===== -->
@@ -199,7 +199,7 @@
 
 <!-- ================= USER PANEL ================= -->
   <div *ngIf="role === 'user'">
-    <mat-tab-group>
+    <mat-tab-group class="dashboard-tabs">
       <mat-tab label="Overview">
 
         <div class="tab-content">
