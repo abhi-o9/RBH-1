@@ -70,14 +70,15 @@ namespace backend.Controllers
             }
             else
             {
-                // Send to receiver role group
+                // Send to receiver group
                 await _hubContext.Clients.Group(receiverRole)
                     .SendAsync("ReceiveMessage", sender, request.Message);
 
-                // ALSO send to sender's role group
-                await _hubContext.Clients.Group(senderRole.ToLower())
+                // Send ONLY to sender
+                await _hubContext.Clients.User(sender)
                     .SendAsync("ReceiveMessage", sender, request.Message);
             }
+
 
 
 
