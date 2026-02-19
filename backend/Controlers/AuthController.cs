@@ -51,6 +51,8 @@ public class AuthController : ControllerBase
 
         // Generate new session ID
         var newSessionId = Guid.NewGuid().ToString();
+        user.currentSessionId = newSessionId;
+        await _couchDb.UpdateAsync(user._id, user);
 
         // Save session ID to user
         user.currentSessionId = newSessionId;

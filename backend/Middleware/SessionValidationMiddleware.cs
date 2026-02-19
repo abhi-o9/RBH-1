@@ -20,13 +20,13 @@ public class SessionValidationMiddleware
 
             if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(tokenSessionId))
             {
-                var users = await couchDb.GetAllAsync<User>();
-                var dbUser = users.FirstOrDefault(u => u.email == email);
+                var userId = $"user:{email}";
+                var dbUser = await couchDb.GetAsync<User>(userId);
 
                 if (dbUser == null || dbUser.currentSessionId != tokenSessionId)
                 {
                     context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Session invalid or logged in elsewhere.");
+                    await context.Response.WriteAsync("Session expired.");
                     return;
                 }
             }
@@ -34,4 +34,5 @@ public class SessionValidationMiddleware
 
         await _next(context);
     }
+
 }
