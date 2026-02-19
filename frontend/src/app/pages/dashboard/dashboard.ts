@@ -63,6 +63,7 @@ export class Dashboard implements OnInit, OnDestroy {
   selectedRole: string = 'all';
   public selectedTabIndex = 0;
   private tabTimeout: any;
+  private autoRefreshInterval: any;
   private readonly TAB_TIMEOUT = 5000; // 20 seconds
   
   public lineChartType: 'line' = 'line';
@@ -244,6 +245,22 @@ export class Dashboard implements OnInit, OnDestroy {
       this.cd.detectChanges();
       this.scrollToBottom();
     });
+    // 🔄 Auto refresh analytics every 10 seconds
+    this.autoRefreshInterval = setInterval(() => {
+
+      if (this.role === 'admin') {
+        this.loadPendingUsers(); 
+        this.loadUserGrowth();
+        this.loadUsersByRole();
+      }
+
+      if (this.role === 'user') {
+        this.loadMyMessagesPerDay();
+        this.loadMyActivityTrend();
+      }
+
+    }, 5000); // 5 seconds
+
   }
 
   @ViewChildren('chatContainer') chatContainers!: QueryList<ElementRef>;
@@ -462,6 +479,11 @@ export class Dashboard implements OnInit, OnDestroy {
     if (this.tabTimeout) {
       clearTimeout(this.tabTimeout);
     }
+
+    if (this.autoRefreshInterval) {
+      clearInterval(this.autoRefreshInterval);
+    }
   }
+
 
 }
