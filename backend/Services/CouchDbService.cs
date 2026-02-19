@@ -130,6 +130,13 @@ public class Row<T>
         var response = await _httpClient.PutAsync($"/{_database}/{id}", content);
         response.EnsureSuccessStatusCode();
     }
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        var users = await GetAllAsync<User>();
 
+        return users.FirstOrDefault(u =>
+            string.Equals(u.email, email, StringComparison.OrdinalIgnoreCase)
+        );
+    }
 
 }

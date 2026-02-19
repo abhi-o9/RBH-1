@@ -13,15 +13,20 @@ public class SessionValidationMiddleware
 
     public async Task InvokeAsync(HttpContext context, CouchDbService couchDb)
     {
+        if (context.Request.Path.StartsWithSegments("/api/auth"))
+        {
+            await _next(context);
+            return;
+        }
+
         if (context.User.Identity?.IsAuthenticated == true)
         {
-            var email = context.User.FindFirst(ClaimTypes.Name)?.Value;
+            var email = context.User.Identity?.Name;
             var tokenSessionId = context.User.FindFirst("sessionId")?.Value;
 
             if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(tokenSessionId))
             {
-                var users = await couchDb.GetAllAsync<User>();
-                var dbUser = users.FirstOrDefault(u => u.email == email);
+                var dbUser = await couchDb.GetUserByEmailAsync(email);
 
                 if (dbUser == null || dbUser.currentSessionId != tokenSessionId)
                 {
@@ -34,4 +39,5 @@ public class SessionValidationMiddleware
 
         await _next(context);
     }
+
 }

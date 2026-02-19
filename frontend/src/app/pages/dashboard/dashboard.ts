@@ -259,7 +259,7 @@ export class Dashboard implements OnInit, OnDestroy {
         this.loadMyActivityTrend();
       }
 
-    }, 5000); // 5 seconds
+    }, 10000); // 5 seconds
 
   }
 

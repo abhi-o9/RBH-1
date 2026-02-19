@@ -95,8 +95,9 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 app.UseCors("AllowAngular");
 app.UseAuthentication();
-app.UseMiddleware<SessionValidationMiddleware>();
+
 app.UseAuthorization();
+app.UseMiddleware<SessionValidationMiddleware>();
 app.MapHub<ChatHub>("/chathub");
 app.MapControllers();
 app.Run();
