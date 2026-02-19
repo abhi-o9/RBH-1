@@ -13,7 +13,10 @@
   <!-- ================= ADMIN PANEL ================= -->
   <div *ngIf="role === 'admin'">
 
-    <mat-tab-group class="dashboard-tabs">
+    <mat-tab-group class="dashboard-tabs"
+                   [(selectedIndex)]="selectedTabIndex"
+                   (selectedTabChange)="onTabChange($event)">
+
 
       <!-- ===== TAB A ===== -->
       <!-- ===== TAB Analytics ===== -->
@@ -199,28 +202,42 @@
 
 <!-- ================= USER PANEL ================= -->
   <div *ngIf="role === 'user'">
-    <mat-tab-group class="dashboard-tabs">
-      <mat-tab label="Overview">
+    <mat-tab-group class="dashboard-tabs"
+                   [(selectedIndex)]="selectedTabIndex"
+                   (selectedTabChange)="onTabChange($event)">
 
-        <div class="tab-content">
+      <mat-tab label="My Analytics">
 
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>Welcome User 👋</mat-card-title>
-              <mat-card-subtitle>Overview</mat-card-subtitle>
-            </mat-card-header>
+        <div class="analytics-wrapper">
 
+          <!-- My Messages Per Day -->
+          <mat-card class="dashboard-card analytics-card">
+            <mat-card-title>My Messages Per Day</mat-card-title>
             <mat-card-content>
-              <p>
-                This is your user panel.
-                You can manage your personel data here.
-              </p>
+              <canvas baseChart
+                      [data]="userLineChartData"
+                      [options]="lineChartOptions"
+                      [type]="lineChartType">
+              </canvas>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Activity Trend -->
+          <mat-card class="dashboard-card analytics-card">
+            <mat-card-title>Sent vs Received</mat-card-title>
+            <mat-card-content>
+              <canvas baseChart
+                      [data]="userBarChartData"
+                      [options]="barChartOptions"
+                      [type]="barChartType">
+              </canvas>
             </mat-card-content>
           </mat-card>
 
         </div>
 
       </mat-tab>
+
 
       <mat-tab label="Messages">
         <div class="tab-content">

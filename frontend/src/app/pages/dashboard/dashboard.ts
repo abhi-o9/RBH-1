@@ -24,8 +24,12 @@ import {
   Legend,
   
 } from 'chart.js';
-
+import { OnDestroy } from '@angular/core';
 import { Chart, type ChartConfiguration } from 'chart.js';
+import { BarController, BarElement } from 'chart.js';
+
+Chart.register(BarController, BarElement);
+
 
 // 📊 Role Distribution Chart
 
@@ -41,12 +45,13 @@ import { Chart, type ChartConfiguration } from 'chart.js';
     MatTableModule,
     MatToolbarModule,
     FormsModule,
-    BaseChartDirective
+    BaseChartDirective,
+   
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
-export class Dashboard implements OnInit {
+export class Dashboard implements OnInit, OnDestroy {
 
   role: string = '';
   loggedInUser: string = '';
@@ -56,8 +61,10 @@ export class Dashboard implements OnInit {
   message: string = '';
   messages: any[] = [];
   selectedRole: string = 'all';
-
-  // 📈 Chart Config
+  public selectedTabIndex = 0;
+  private tabTimeout: any;
+  private readonly TAB_TIMEOUT = 5000; // 20 seconds
+  
   public lineChartType: 'line' = 'line';
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
@@ -134,7 +141,46 @@ export class Dashboard implements OnInit {
       }
     }
   };
+  public userLineChartData: ChartConfiguration<'line'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Messages Sent',
+        borderColor: '#ff7043',
+        backgroundColor: 'rgba(255,112,67,0.15)',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  };
 
+  public barChartType: 'bar' = 'bar';
+
+  public userBarChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Sent',
+        backgroundColor: '#5e35b1'
+      },
+      {
+        data: [],
+        label: 'Received',
+        backgroundColor: '#42a5f5'
+      }
+    ]
+  };
+
+  public barChartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
 
 
   constructor(
@@ -180,6 +226,11 @@ export class Dashboard implements OnInit {
       this.loadUsersByRole();   // 👈 ADD THIS
 
     }
+    if (this.role === 'user') {
+      this.loadMyMessagesPerDay();
+      this.loadMyActivityTrend();
+    }
+
 
     this.chatService.startConnection();
     this.loadHistory();
@@ -292,6 +343,98 @@ export class Dashboard implements OnInit {
       });
   }
 
+  loadMyMessagesPerDay() {
+    const token = sessionStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    this.http.get<any[]>('http://localhost:5264/api/analytics/my-messages-per-day', { headers })
+      .subscribe(res => {
+
+        this.userLineChartData = {
+          ...this.userLineChartData,
+          labels: res.map(x => x.date),
+          datasets: [
+            {
+              ...this.userLineChartData.datasets[0],
+              data: res.map(x => x.count)
+            }
+          ]
+        };
+
+        this.cd.detectChanges();
+      });
+  }
+
+  loadMyActivityTrend() {
+    const token = sessionStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    this.http.get<any[]>('http://localhost:5264/api/analytics/my-activity-trend', { headers })
+      .subscribe(res => {
+
+        this.userBarChartData = {
+          labels: res.map(x => x.date),
+          datasets: [
+            {
+              label: 'Sent',
+              data: res.map(x => x.sent),
+              backgroundColor: '#5e35b1'
+            },
+            {
+              label: 'Received',
+              data: res.map(x => x.received),
+              backgroundColor: '#42a5f5'
+            }
+          ]
+        };
+
+        this.cd.detectChanges();
+      });
+  }
+  onTabChange(event: any) {
+
+    // Clear previous timer
+    if (this.tabTimeout) {
+      clearTimeout(this.tabTimeout);
+    }
+
+    const selectedLabel = event.tab.textLabel;
+
+    // Admin → Protect Analytics tab
+    if (this.role === 'admin' && selectedLabel === 'Analytics') {
+      this.startTabTimer();
+    }
+
+    // User → Protect Messages tab (assuming this is Tab F)
+    if (this.role === 'user' && selectedLabel === 'My Analytics') {
+      this.startTabTimer();
+    }
+  }
+
+  startTabTimer() {
+
+    this.tabTimeout = setTimeout(() => {
+
+      alert("Session expired for this tab.");
+
+      // Switch to next safe tab
+      if (this.role === 'admin') {
+        this.selectedTabIndex = 1; // Admin: go to Messages
+      }
+
+      if (this.role === 'user') {
+        this.selectedTabIndex = 1; // User: go to Messages
+      }
+
+    }, this.TAB_TIMEOUT);
+  }
+
 
 
   sendMessage() {
@@ -314,4 +457,11 @@ export class Dashboard implements OnInit {
     sessionStorage.removeItem('role');
     this.router.navigate(['/']);
   }
+
+  ngOnDestroy() {
+    if (this.tabTimeout) {
+      clearTimeout(this.tabTimeout);
+    }
+  }
+
 }
