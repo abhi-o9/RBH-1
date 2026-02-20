@@ -265,17 +265,7 @@ export class Dashboard implements OnInit, OnDestroy {
 
   @ViewChildren('chatContainer') chatContainers!: QueryList<ElementRef>;
 
-  scrollToBottom() {
-    setTimeout(() => {
-      if (this.chatContainers?.length > 0) {
-        const container = this.chatContainers.last.nativeElement;
-        container.scrollTo({
-          top: container.scrollHeight,
-          behavior: 'smooth'
-        });
-      }
-    }, 50);
-  }
+  
 
 
   loadPendingUsers() {
@@ -423,6 +413,12 @@ export class Dashboard implements OnInit, OnDestroy {
 
     const selectedLabel = event.tab.textLabel;
 
+    if (selectedLabel === 'Messages') {
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 200);
+    }
+
     // Admin → Protect Analytics tab
     if (this.role === 'admin' && selectedLabel === 'Analytics') {
       this.startTabTimer();
@@ -467,6 +463,16 @@ export class Dashboard implements OnInit, OnDestroy {
       this.cd.detectChanges();
       this.scrollToBottom();
     });
+  }
+
+  scrollToBottom() {
+    setTimeout(() => {
+      if (!this.chatContainers || this.chatContainers.length === 0) return;
+
+      const container = this.chatContainers.last.nativeElement;
+
+      container.scrollTop = container.scrollHeight;
+    }, 100); // increased delay slightly
   }
 
   logout() {
