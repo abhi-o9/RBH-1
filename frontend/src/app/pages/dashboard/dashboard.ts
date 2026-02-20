@@ -64,7 +64,7 @@ export class Dashboard implements OnInit, OnDestroy {
   public selectedTabIndex = 0;
   private tabTimeout: any;
   private autoRefreshInterval: any;
-  private readonly TAB_TIMEOUT = 5000; // 20 seconds
+  private readonly TAB_TIMEOUT = 10000; // 20 seconds
   
   public lineChartType: 'line' = 'line';
 

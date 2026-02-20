@@ -48,8 +48,14 @@ export class Login {
         // REDIRECT
         this.router.navigate(['/dashboard']);
       },
-      error: () => {
-        alert('Invalid credentials');
+      error: (err) => {
+
+        if (err.error) {
+          alert(err.error);  // 🔥 show backend message
+        } else {
+          alert('Login failed');
+        }
+
       }
     });
   }
