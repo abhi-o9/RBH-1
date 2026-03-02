@@ -13,9 +13,8 @@
   <!-- ================= ADMIN PANEL ================= -->
   <div *ngIf="role === 'admin'">
 
-    <mat-tab-group class="dashboard-tabs"
-                   [(selectedIndex)]="selectedTabIndex"
-                   (selectedTabChange)="onTabChange($event)">
+    <mat-tab-group class="dashboard-tabs" [(selectedIndex)]="selectedTabIndex"
+      (selectedTabChange)="onTabChange($event)">
 
 
       <!-- ===== TAB A ===== -->
@@ -26,10 +25,7 @@
           <mat-card class="dashboard-card analytics-card">
             <mat-card-title>User Growth (Daily)</mat-card-title>
             <mat-card-content>
-              <canvas baseChart
-                      [data]="lineChartData"
-                      [options]="lineChartOptions"
-                      [type]="lineChartType">
+              <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="lineChartType">
               </canvas>
             </mat-card-content>
           </mat-card>
@@ -37,10 +33,7 @@
           <mat-card class="dashboard-card analytics-card">
             <mat-card-title>User Distribution by Role</mat-card-title>
             <mat-card-content>
-              <canvas baseChart
-                      [data]="pieChartData"
-                      [options]="pieChartOptions"
-                      [type]="pieChartType">
+              <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="pieChartType">
               </canvas>
             </mat-card-content>
           </mat-card>
@@ -64,17 +57,19 @@
               <!-- Message List -->
               <div class="chat-messages" #chatContainer>
 
-                <div *ngFor="let msg of messages"
-                     [ngClass]="{
+                <div *ngFor="let msg of messages" [ngClass]="{
          'sent': msg.senderId === loggedInUser,
          'received': msg.senderId !== loggedInUser
-       }"
-                     class="message-item">
+       }" class="message-item">
 
                   <mat-card class="chat-bubble">
 
                     <div class="sender">
                       {{ msg.senderId }}
+                    </div>
+
+                    <div class="receiver" style="font-size: 0.8em; color: gray; margin-bottom: 4px;">
+                      To: {{ msg.receiverRole }}
                     </div>
 
                     <div class="text">
@@ -100,15 +95,9 @@
                   <option value="user">User</option>
                 </select>
 
-                <input matInput
-                       [(ngModel)]="message"
-                       placeholder="Type your message..."
-                       class="chat-textbox" />
+                <input matInput [(ngModel)]="message" placeholder="Type your message..." class="chat-textbox" />
 
-                <button mat-raised-button
-                        class="chat-send-btn"
-                        color="primary"
-                        (click)="sendMessage()">
+                <button mat-raised-button class="chat-send-btn" color="primary" (click)="sendMessage()">
                   Send
                 </button>
 
@@ -165,8 +154,7 @@
                   <ng-container matColumnDef="action" class="action-column">
                     <th mat-header-cell *matHeaderCellDef class="center-cell"> Action </th>
                     <td mat-cell *matCellDef="let user" class="center-cell">
-                      <button mat-raised-button color="primary"
-                              (click)="approveUser(user._id)">
+                      <button mat-raised-button color="primary" (click)="approveUser(user._id)">
                         Approve
                       </button>
                     </td>
@@ -200,11 +188,10 @@
 
 
 
-<!-- ================= USER PANEL ================= -->
+  <!-- ================= USER PANEL ================= -->
   <div *ngIf="role === 'user'">
-    <mat-tab-group class="dashboard-tabs"
-                   [(selectedIndex)]="selectedTabIndex"
-                   (selectedTabChange)="onTabChange($event)">
+    <mat-tab-group class="dashboard-tabs" [(selectedIndex)]="selectedTabIndex"
+      (selectedTabChange)="onTabChange($event)">
 
       <mat-tab label="My Analytics">
 
@@ -214,10 +201,7 @@
           <mat-card class="dashboard-card analytics-card">
             <mat-card-title>My Messages Per Day</mat-card-title>
             <mat-card-content>
-              <canvas baseChart
-                      [data]="userLineChartData"
-                      [options]="lineChartOptions"
-                      [type]="lineChartType">
+              <canvas baseChart [data]="userLineChartData" [options]="lineChartOptions" [type]="lineChartType">
               </canvas>
             </mat-card-content>
           </mat-card>
@@ -226,10 +210,7 @@
           <mat-card class="dashboard-card analytics-card">
             <mat-card-title>Sent vs Received</mat-card-title>
             <mat-card-content>
-              <canvas baseChart
-                      [data]="userBarChartData"
-                      [options]="barChartOptions"
-                      [type]="barChartType">
+              <canvas baseChart [data]="userBarChartData" [options]="barChartOptions" [type]="barChartType">
               </canvas>
             </mat-card-content>
           </mat-card>
@@ -251,17 +232,19 @@
               <!-- Message List -->
               <div class="chat-messages" #chatContainer>
 
-                <div *ngFor="let msg of messages"
-                     [ngClass]="{
+                <div *ngFor="let msg of messages" [ngClass]="{
          'sent': msg.senderId === loggedInUser,
          'received': msg.senderId !== loggedInUser
-       }"
-                     class="message-item">
+       }" class="message-item">
 
                   <mat-card class="chat-bubble">
 
                     <div class="sender">
                       {{ msg.senderId }}
+                    </div>
+
+                    <div class="receiver" style="font-size: 0.8em; color: gray; margin-bottom: 4px;">
+                      To: {{ msg.receiverRole }}
                     </div>
 
                     <div class="text">
@@ -287,15 +270,9 @@
                   <option value="user">User</option>
                 </select>
 
-                <input matInput
-                       [(ngModel)]="message"
-                       placeholder="Type your message..."
-                       class="chat-textbox" />
+                <input matInput [(ngModel)]="message" placeholder="Type your message..." class="chat-textbox" />
 
-                <button mat-raised-button
-                        class="chat-send-btn"
-                        color="primary"
-                        (click)="sendMessage()">
+                <button mat-raised-button class="chat-send-btn" color="primary" (click)="sendMessage()">
                   Send
                 </button>
 

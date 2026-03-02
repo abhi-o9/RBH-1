@@ -66,21 +66,21 @@ namespace backend.Controllers
             if (receiverRole == "all")
             {
                 await _hubContext.Clients.All
-                    .SendAsync("ReceiveMessage", sender, request.Message);
+                    .SendAsync("ReceiveMessage", sender, receiverRole, request.Message);
             }
             else
             {
                 // Send to receiver group
                 await _hubContext.Clients.Group(receiverRole)
-                    .SendAsync("ReceiveMessage", sender, request.Message);
+                    .SendAsync("ReceiveMessage", sender, receiverRole, request.Message);
 
-                // Send ONLY to sender
-                await _hubContext.Clients.User(sender)
-                    .SendAsync("ReceiveMessage", sender, request.Message);
+                // Send ONLY to sender if they aren't already in the receiver group
+                if (senderRole.ToLower() != receiverRole)
+                {
+                    await _hubContext.Clients.User(sender)
+                        .SendAsync("ReceiveMessage", sender, receiverRole, request.Message);
+                }
             }
-
-
-
 
             return Ok("Message sent successfully.");
         }

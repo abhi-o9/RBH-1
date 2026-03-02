@@ -22,7 +22,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  
+
 } from 'chart.js';
 import { OnDestroy } from '@angular/core';
 import { Chart, type ChartConfiguration } from 'chart.js';
@@ -46,7 +46,7 @@ Chart.register(BarController, BarElement);
     MatToolbarModule,
     FormsModule,
     BaseChartDirective,
-   
+
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
@@ -65,7 +65,7 @@ export class Dashboard implements OnInit, OnDestroy {
   private tabTimeout: any;
   private autoRefreshInterval: any;
   private readonly TAB_TIMEOUT = 10000; // 20 seconds
-  
+
   public lineChartType: 'line' = 'line';
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
@@ -87,37 +87,37 @@ export class Dashboard implements OnInit, OnDestroy {
   };
 
 
- public lineChartOptions: ChartConfiguration<'line'>['options'] = {
-  responsive: true,
-  animation: {
-    duration: 1200,
-    easing: 'easeOutQuart'
-  },
-  plugins: {
-    legend: {
-      position: 'top'
+  public lineChartOptions: ChartConfiguration<'line'>['options'] = {
+    responsive: true,
+    animation: {
+      duration: 1200,
+      easing: 'easeOutQuart'
     },
-    tooltip: {
-      backgroundColor: '#2c2c2c',
-      titleColor: '#fff',
-      bodyColor: '#fff',
-      padding: 12,
-      cornerRadius: 8
-    }
-  },
-  scales: {
-    x: {
-      grid: {
-        display: false
+    plugins: {
+      legend: {
+        position: 'top'
+      },
+      tooltip: {
+        backgroundColor: '#2c2c2c',
+        titleColor: '#fff',
+        bodyColor: '#fff',
+        padding: 12,
+        cornerRadius: 8
       }
     },
-    y: {
-      beginAtZero: true,
-      grid: {
-        color: 'rgba(0,0,0,0.05)'
+    scales: {
+      x: {
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(0,0,0,0.05)'
+        }
       }
     }
-  }
   };
   public pieChartType: 'pie' = 'pie';
 
@@ -236,9 +236,10 @@ export class Dashboard implements OnInit, OnDestroy {
     this.chatService.startConnection();
     this.loadHistory();
 
-    this.chatService.onMessageReceived((sender, message) => {
+    this.chatService.onMessageReceived((sender, receiverRole, message) => {
       this.messages.push({
         senderId: sender,
+        receiverRole: receiverRole,
         message: message,
         timestamp: new Date()
       });
@@ -249,7 +250,7 @@ export class Dashboard implements OnInit, OnDestroy {
     this.autoRefreshInterval = setInterval(() => {
 
       if (this.role === 'admin') {
-        this.loadPendingUsers(); 
+        this.loadPendingUsers();
         this.loadUserGrowth();
         this.loadUsersByRole();
       }
@@ -265,7 +266,7 @@ export class Dashboard implements OnInit, OnDestroy {
 
   @ViewChildren('chatContainer') chatContainers!: QueryList<ElementRef>;
 
-  
+
 
 
   loadPendingUsers() {
@@ -493,3 +494,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
 
 }
+
+
+

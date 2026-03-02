@@ -59,9 +59,9 @@ export class ChatService {
   }
 
 
-  public onMessageReceived(callback: (sender: string, message: string) => void) {
-    this.hubConnection.on('ReceiveMessage', (sender, message) => {
-      callback(sender, message);
+  public onMessageReceived(callback: (sender: string, receiverRole: string, message: string) => void) {
+    this.hubConnection.on('ReceiveMessage', (sender, receiverRole, message) => {
+      callback(sender, receiverRole, message);
     });
   }
 }
