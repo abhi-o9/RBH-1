@@ -186,10 +186,97 @@ Databases
 
 ---
 
-## 📄 Reference
+## ▶️ How to Run the Project
 
-This project is implemented based on the following requirement specification:
+Follow these steps to run the project locally:
 
+---
+
+### 📦 Prerequisites
+
+Make sure you have installed:
+
+* Node.js & npm
+* Angular CLI
+
+  ```bash
+  npm install -g @angular/cli
+  ```
+* .NET SDK
+* PostgreSQL
+* Apache CouchDB
+
+---
+
+### 📁 Clone the Repository
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+```
+
+---
+
+### ⚙️ Backend Setup (.NET)
+
+```bash
+cd backend
+dotnet restore
+dotnet run
+```
+
+* Backend will run on: `https://localhost:5001` (or similar)
+
+---
+
+### 🎨 Frontend Setup (Angular)
+
+```bash
+cd frontend
+npm install
+ng serve
+```
+
+* Frontend will run on: `http://localhost:4200`
+
+---
+
+### 🗄️ Database Setup
+
+#### CouchDB
+
+* Create a database for users
+* Update connection string in backend config
+
+#### PostgreSQL
+
+* Create database for messages & analytics
+* Run required tables/scripts
+
+---
+
+### 🔐 Configuration
+
+* Update JWT Secret in `appsettings.json`
+* Configure DB connection strings
+* Ensure SignalR endpoint matches frontend
+
+---
+
+### 🚀 Run the Application
+
+1. Start Backend
+2. Start Frontend
+3. Open browser → `http://localhost:4200`
+
+---
+
+### 👨‍💼 Default Admin Login
+
+```bash
+Username: admin
+Password: admin123
+```
 
 ---
 
